@@ -1,0 +1,91 @@
+%a)
+from collections import deque
+
+# Cấu trúc trạng thái 8-puzzle
+goal = "12345678_"   # _ là ô trống
+moves = {
+    0: [1, 3],
+    1: [0, 2, 4],
+    2: [1, 5],
+    3: [0, 4, 6],
+    4: [1, 3, 5, 7],
+    5: [2, 4, 8],
+    6: [3, 7],
+    7: [4, 6, 8],
+    8: [5, 7]
+}
+
+def get_neighbors(state):
+    idx = state.index('_')
+    result = []
+    for m in moves[idx]:
+        s = list(state)
+        s[idx], s[m] = s[m], s[idx]
+        result.append("".join(s))
+    return result
+
+# --- Breadth-First Search (BFS) ---
+def bfs(start):
+    q = deque([(start, [start])])
+    visited = {start}
+    while q:
+        state, path = q.popleft()
+        if state == goal:
+            return path
+        for nxt in get_neighbors(state):
+            if nxt not in visited:
+                visited.add(nxt)
+                q.append((nxt, path + [nxt]))
+    return None
+
+# --- Depth-First Search (DFS) ---
+def dfs(start, path=None, visited=None):
+    if path is None:
+        path, visited = [start], set()
+    state = path[-1]
+    if state == goal:
+        return path
+    visited.add(state)
+    for nxt in get_neighbors(state):
+        if nxt not in visited:
+            res = dfs(start, path + [nxt], visited)
+            if res:
+                return res
+    return None
+
+# --- Iterative Deepening Search (IDS) ---
+def dls(state, depth, visited):
+    if state == goal:
+        return [state]
+    if depth == 0:
+        return None
+    visited.add(state)
+    for nxt in get_neighbors(state):
+        if nxt not in visited:
+            res = dls(nxt, depth - 1, visited)
+            if res:
+                return [state] + res
+    return None
+
+def ids(start):
+    depth = 0
+    while True:
+        visited = set()
+        res = dls(start, depth, visited)
+        if res:
+            return res
+        depth += 1
+
+%b)
+%Vì sao không nên dùng DFS cho 8-puzzle
+%Lý do:
+%Không gian tìm kiếm cực lớn: trung bình có ~181.440 trạng thái hợp lệ.
+% → DFS dễ đi sâu vào nhánh sai và không bao giờ quay lại nhánh đúng.
+%Không đảm bảo tìm được lời giải ngắn nhất (non-optimal).
+%Dễ gặp vòng lặp (ví dụ di chuyển ô sang trái rồi lại sang phải).
+%Độ sâu lời giải không biết trước → DFS có thể chạy vô hạn.
+%Bộ nhớ ít, nhưng thời gian có thể vô cùng lớn → không thực tế.
+%Thay vào đó:
+%BFS: đảm bảo tìm được lời giải ngắn nhất (dù tốn bộ nhớ).
+%IDS: dung hòa giữa BFS và DFS — tiết kiệm bộ nhớ, vẫn đảm bảo tìm lời giải.
+
