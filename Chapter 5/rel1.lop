@@ -1,1 +1,26 @@
 % Create a solution for Exercise 5.4(b), page 88 
+
+(b) So sánh cho truy vấn descendant(X, Y)
+PROLOG:
+Tìm được vài kết quả đầu như:
+
+ X = oscar, Y = karen ;
+X = mary,  Y = karen ;
+X = eve,   Y = anne ;
+
+
+Sau đó rơi vào vòng lặp vô hạn khi dùng luật đối xứng → không liệt kê hết lời giải.
+
+
+E theorem prover:
+Xét toàn bộ KB một cách đầy đủ → tìm ra tất cả các cặp (X, Y) đúng logic, gồm cả (clyde, karen).
+
+
+Không bị lỗi do đệ quy hay thứ tự mệnh đề.
+
+
+Kết luận (b):
+PROLOG: không đầy đủ, dừng sớm vì lặp vô hạn.
+
+
+E: đầy đủ, tìm hết các quan hệ hậu duệ đúng.
