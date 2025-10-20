@@ -1,1 +1,28 @@
 % Create a solution for Exercise 5.4(a), page 88 
+
+(a) So sánh cho truy vấn descendant(clyde, karen)
+PROLOG (lỗi):
+Khi chạy truy vấn, PROLOG thử luật descendant(X,Y) :- child(X,Y,Z) rồi child(X,Z,Y) :- child(X,Y,Z).
+
+
+Do hai luật này đối xứng, PROLOG gọi đi gọi lại chính mình → rơi vào vòng lặp vô hạn.
+
+
+Kết quả:
+
+ ?- descendant(clyde, karen).
+ERROR: Stack limit exceeded
+
+
+E theorem prover (thành công):
+E không dùng tìm kiếm tuần tự như PROLOG mà chứng minh logic bằng phân giải.
+
+
+Nó tránh vòng lặp, xét toàn bộ các quan hệ một cách có hệ thống.
+
+
+E suy luận được: Clyde → Mary → Karen ⇒ descendant(clyde, karen) là đúng.
+
+
+Kết luận (a):
+ E trả lời đúng vì nó dùng chiến lược chứng minh đầy đủ và không phụ thuộc thứ tự mệnh đề, còn PROLOG bị mắc kẹt do đệ quy không dừng.
